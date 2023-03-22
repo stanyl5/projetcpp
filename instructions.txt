@@ -1,0 +1,2 @@
+- Lire le fichier ppm. 
+-> Transformer sous forme matricielle
