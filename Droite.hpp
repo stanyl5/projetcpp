@@ -1,6 +1,3 @@
-#ifndef Pointh
-#define Pointh
-
 #include <iostream>
 #include <cmath>
 #include<fstream>
@@ -9,14 +6,4 @@
 #include<sstream>
 #include <array>
 
-struct Point
-{
-    float x;
-    float y;
-
-    void AffichePoint();
-
-
-};
-
-#endif 
+#include "Point.hpp"

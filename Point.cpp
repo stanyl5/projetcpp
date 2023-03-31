@@ -1,6 +1,8 @@
 #include "Point.hpp"
 
-double Point :: Norme(double x, double y) 
+
+
+void Point :: AffichePoint()
 {
-    return sqrt(abs(x- y));
+    std :: cout<< "x = " <<x <<" , et y = " <<y<<std :: endl;
 }
