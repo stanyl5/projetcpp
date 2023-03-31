@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <cmath>
 #include <vector>
+#include <string.h>
 
 struct Matrice
 {
@@ -19,11 +20,14 @@ struct Matrice
 
   void AfficheMatrice()
   {
+    std::string s = std::to_string(mat[1][1]);
+    std::cout << strlen(s) << std::endl;
     for (int x = 0; x < ligne; ++x)
     {
       for (int y = 0; y < colonne; ++y)
       {
-        std::cout << mat[x][y]<< "   " ;
+        //std::cout<<(char)mat[x][y];
+        //std::cout << mat[x][y]<< "   " ;
       }
 
       std::cout << std::endl;
@@ -31,49 +35,54 @@ struct Matrice
   }
 };
 
+double Norme(double x, double y) {
+    return sqrt(abs(x- y));
+}
+
 Matrice dessiner_ligne(Matrice mat, float m, float p){
     int lignes = mat.ligne;
     int colonnes = mat.colonne;
     if (abs(m)<=1){
             for(int j = 0; j < colonnes; j++) {
-                if ((int)m*j+p<=lignes-1){ // pour eviter que la droite "depasse" l'image
-                    mat.mat[(int)(m*j+p)][j] = 255; 
+                if (((int)(m*j+p)<=lignes-1)&&((int)(m*j+p)>=0)){ // pour eviter que la droite "depasse" l'image
+                    //std::cout<< (int)(m*j+p) << " "<< m*j+p<< " " << Norme((int)(m*j+p),m*j+p)*255<< " ";
+                    //std::cout << int(m*j+p)/(m*j+p)<< " "; 
+                    
+                    mat.mat[(int)(m*j+p)][j] = Norme((int)(m*j+p),m*j+p)*255;                    
+                }
+                if (((int)(m*j+p)+1<=lignes-1)&&((int)(m*j+p)+1>=0)){ // pour eviter que la droite "depasse" l'image
+                    mat.mat[(int)(m*j+p)+1][j] = (1-Norme((int)(m*j+p),m*j+p))*255;                    
                 }
             }
     }
     if (abs(m)>1){
         for(int i = 0; i < lignes; i++) {
-            if ((int)((i-p)/m)<=colonnes-1){ // pour eviter que la droite "depasse" l'image
-                
-                mat.mat[i][(int)((i-p)/m)] = 255;
+            if (((int)((i-p)/m)<=colonnes-1)&&((int)((i-p)/m)>=0)){ // pour eviter que la droite "depasse" l'image
+                //std::cout<< (int)((i-p)/m) << " "<< ((i-p)/m)<< " " << Norme((int)((i-p)/m),((i-p)/m))*255<< " "<< (1-Norme((int)((i-p)/m),((i-p)/m)))*255<< " ";
+
+                mat.mat[i][(int)((i-p)/m)] = Norme((int)((i-p)/m),((i-p)/m))*255;
             }
+            if (((int)((i-p)/m)+1<=colonnes-1)&&((int)((i-p)/m)+1>=0)){ // pour eviter que la droite "depasse" l'image
+                    mat.mat[i][(int)((i-p)/m)+1] = (1-Norme((int)((i-p)/m),((i-p)/m)))*255;                    
+                }
         }
     }
     return mat;
 }
 
-
 int main(void)
 {
-  Matrice mat(10, 10);
+  
+  int width = 10;
+  int height = 10;
+  Matrice mat(width, height);
   //mat.AfficheMatrice();
-  Matrice mat2(10, 10);
-  mat2 = dessiner_ligne(mat, 1, 1);
+  Matrice mat2(width, height);
+  mat2 = dessiner_ligne(mat, -0.25, 3);
+  std::cout<<"\n";
+  std::cout<<"\n";
   mat2.AfficheMatrice();
-  int width = 300;
-  int height = 300;
-  FILE *fp;
+ 
 
-  fp = fopen("image.ppm", "wb"); // ouvrir le fichier en mode binaire
-
-  fprintf(fp, "P6\n%d %d\n255\n", width, height); // écrire l'en-tête PPM
-
-  unsigned char red[] = {255, 0, 0}; // définir la couleur rouge
-
-  for (int i = 0; i < width*height; i++) {
-      fwrite(red, 1, 3, fp); // écrire la couleur rouge pour chaque pixel
-  }
-
-  fclose(fp); // fermer le fichier
   return 0;
 }
