@@ -1,4 +1,4 @@
-#include"image.hpp"
+#include"Image.hpp"
 
 void Image ::  afficheImage()
 {
