@@ -1,9 +1,131 @@
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
 #include <cmath>
-#include <vector>
+#include<fstream>
+#include<vector>
+#include<string>
+#include<sstream>
 #include <string.h>
+
+#include "Image.hpp"
+#include <fstream>
+
+using namespace std;
+
+
+
+Image lirefichier ()
+{
+    std :: ifstream monfichier ("m1projetcpp2.ppm"); // Ouverture du fichier
+    Image image;
+    if (monfichier) // On s'assure que le fichier est bien ouvert
+    {
+        
+        int compteur=0; // Le compteur ne tient pas compte des commentaires, et permet d'évoluer dans le code au rythme prédéfini.
+        
+        std :: string ligne; 
+        while(getline(monfichier, ligne)) 
+            {
+                if (ligne[0] != '#')  // On ignore les commentaire du fichier ppm
+                {
+                    if (compteur == 0)
+                    {
+                        // Récupération du numéro de variante
+                        
+                        image.qualite = ligne; 
+
+                    }
+                    else
+                    {
+                        if (compteur == 1)
+                        {           
+                            // Récupération de format de l'image :
+                            // Resolution[0] = largeur,
+                            // Resolution[1] = hauteur  
+
+                            std :: array<int,2> resolution;
+                            std::string parseNum;
+                            std::stringstream streamLigne(ligne);
+                            int res=0;
+                            while(std::getline(streamLigne,parseNum,' '))
+                            {
+                                resolution[res] = std::stoi(parseNum);
+                                res++;
+                            } 
+                            image.ligne = resolution[0];
+                            image.colonne = resolution[1];
+                            
+                        }
+                    else
+                    {
+                        if (compteur==2)
+                        {
+                            // Récupération de la valeur maximale
+                            image.valmax = std :: stoi(ligne);
+                        }
+                        else  // Si le compteur vaut 3
+                        {  
+                            // On initialise une matrice 3D avec la valeur 0
+                            std :: array<int,3>  vecteur;
+                            std :: vector<std :: array<int,3> > intermediaire (image.colonne, vecteur)  ;
+                            image.image = std :: vector<std :: vector< std:: array<int,3>>>  (image.ligne,intermediaire) ;
+                            
+                            // On boucle sur la largeur de l'image, sa hauteur, et pour chaque composante de la couleur    
+                            for (int i = 0;i<image.ligne;i++)
+                            { 
+                                for (int j =0; j< image.colonne; j++)
+                                {
+                                    for (int k=0; k<3;k++) // Boucle sur la couleur
+                                    {
+                                        // On affecte la valeur récupérée dans l'image
+                                        image.image[i][j][k] = stoi (ligne);  // Cette ligne est en premier, car la première valeur a été récupérée dans la condition du while
+                                        getline(monfichier,ligne); 
+                                    }
+                                }
+
+                            }
+                            return image; // On retourne l'image 
+                        }
+                    }
+                }
+                compteur ++;
+
+            }
+
+        }
+    }
+    std :: cout << "Attention, il y a eu une erreur." ;
+    return image ; 
+}
+
+
+void ecrire_fichier(Image A){
+    
+    std::ofstream fichier("image.ppm", std::ios::binary);
+
+    // En-tête de l'image
+    fichier << "P3\n# resolution\n";
+    fichier << A.ligne;
+    fichier << " ";
+    fichier << A.colonne;
+    fichier << "\n# avec 255 comme val max\n255\n# debut de l image\n";
+    
+    // Pixels de l'image
+    
+    for (int i = 0; i < A.ligne; i++){
+        for (int j = 0; j < A.colonne; j++){
+            for (int k = 0; k < 3; k++) {
+                fichier << A.image[i][j][k];
+                fichier << "\n";
+                }
+            }
+            
+        }
+}
+    
+
+    fichier.close();
+
+}
 
 struct Matrice
 {
@@ -20,19 +142,18 @@ struct Matrice
 
   void AfficheMatrice()
   {
-    std::string s = std::to_string(mat[1][1]);
-    std::cout << strlen(s) << std::endl;
     for (int x = 0; x < ligne; ++x)
     {
       for (int y = 0; y < colonne; ++y)
       {
-        //std::cout<<(char)mat[x][y];
-        //std::cout << mat[x][y]<< "   " ;
+        std::cout<<mat[x][y]<< " ";
       }
 
       std::cout << std::endl;
     }
   }
+
+
 };
 
 double Norme(double x, double y) {
@@ -70,19 +191,33 @@ Matrice dessiner_ligne(Matrice mat, float m, float p){
     return mat;
 }
 
-int main(void)
+int main ()
 {
-  
-  int width = 10;
-  int height = 10;
-  Matrice mat(width, height);
-  //mat.AfficheMatrice();
-  Matrice mat2(width, height);
-  mat2 = dessiner_ligne(mat, -0.25, 3);
-  std::cout<<"\n";
-  std::cout<<"\n";
-  mat2.AfficheMatrice();
- 
+    Image A;
+    A = lirefichier();
+    //A.afficheImage();
 
-  return 0;
+    ecrire_fichier(A);
+    Matrice mat2(A.ligne, A.colonne);
+    mat2 = dessiner_ligne(mat2, -0.25, 3);
+    std::cout<<"\n";
+    std::cout<<"\n";
+    mat2.AfficheMatrice();
+
+    
+    int lignes = mat2.ligne;
+    int colonnes = mat2.colonne;
+        for(int i = 0; i < lignes; i++){
+            for(int j = 0; j < colonnes; j++){
+                if (mat2.mat[i][j]!=0){
+                    A.image[i][j][0]=mat2.mat[i][j];
+                    A.image[i][j][1]=mat2.mat[i][j];
+                    A.image[i][j][2]=mat2.mat[i][j];
+                }
+            }
+        }
+
+    ecrire_fichier(A);
+    A.afficheImage();
+    return 0;
 }
