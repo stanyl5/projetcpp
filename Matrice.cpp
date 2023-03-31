@@ -1,25 +1,15 @@
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <cmath>
-#include <vector>
-#include <string.h>
+#include"Matrice.hpp"
 
-struct Matrice
+ 
+Matrice :: Matrice()
 {
-  int ligne;
-  int colonne;
-  std::vector<std::vector<int>> mat;
-
-  Matrice(int lig = 0, int col = 0)
-  {
     ligne = lig;
     colonne = col;
     mat = std::vector<std::vector<int>>(ligne, std::vector<int>(colonne, 0));
-  }
+}
 
-  void AfficheMatrice()
-  {
+void Matrice :: AfficheMatrice()
+{
     std::string s = std::to_string(mat[1][1]);
     std::cout << strlen(s) << std::endl;
     for (int x = 0; x < ligne; ++x)
@@ -32,19 +22,19 @@ struct Matrice
 
       std::cout << std::endl;
     }
-  }
-};
-
-double Norme(double x, double y) {
-    return sqrt(abs(x- y));
 }
 
-Matrice dessiner_ligne(Matrice mat, float m, float p)
-// m est le coefficient directeur de la droite 
-// p est l'ordonée à l'origine
+
+
+Matrice Matrice :: dessiner_ligne(Point point)
+// point.x est le coefficient directeur de la droite 
+// point.y est l'ordonée à l'origine
 {
     int lignes = mat.ligne;
     int colonnes = mat.colonne;
+    float m =point.x;
+    float p = point.y;
+    
     if (abs(m)<=1){
             for(int j = 0; j < colonnes; j++) {
                 if (((int)(m*j+p)<=lignes-1)&&((int)(m*j+p)>=0)){ // pour eviter que la droite "depasse" l'image
@@ -71,21 +61,4 @@ Matrice dessiner_ligne(Matrice mat, float m, float p)
         }
     }
     return mat;
-}
-
-int main(void)
-{
-  
-  int width = 10;
-  int height = 10;
-  Matrice mat(width, height);
-  //mat.AfficheMatrice();
-  Matrice mat2(width, height);
-  mat2 = dessiner_ligne(mat, -0.25, 3);
-  std::cout<<"\n";
-  std::cout<<"\n";
-  mat2.AfficheMatrice();
- 
-
-  return 0;
 }
