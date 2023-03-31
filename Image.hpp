@@ -15,6 +15,7 @@ struct Image
     int colonne;
     int valmax;
     std :: vector<std :: vector< std:: array<int,3>>> image;
+    
     void afficheImage();
     
 };

@@ -99,7 +99,7 @@ int main ()
 {
     Image A;
     A = lirefichier();
-    A.afficheImage;
+    A.afficheImage();
 
     return 0;
 }
