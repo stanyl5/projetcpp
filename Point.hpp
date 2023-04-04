@@ -1,3 +1,6 @@
+#ifndef Pointh
+#define Pointh
+
 #include <iostream>
 #include <cmath>
 #include<fstream>
@@ -11,7 +14,9 @@ struct Point
     float x;
     float y;
 
-    double Norme(double x, double y) ;
+    void AffichePoint();
 
 
 };
+
+#endif 
