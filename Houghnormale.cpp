@@ -17,11 +17,11 @@ Point Houghnormale(std ::vector<Point> vecpoints)
     {
         for (unsigned int j=0; j<30; j++)
         {
-            std :: cout << "condition i = " <<i << " : " << vecpoints[i].x * j + vecpoints[i].y <<  std :: endl ;
+            //std :: cout << "condition i = " <<i << " : " << vecpoints[i].x * j + vecpoints[i].y <<  std :: endl ;
                 
             if (vecpoints[i].x * j + vecpoints[i].y>0 && vecpoints[i].x * j + vecpoints[i].y<30)
             {
-                buffer.mat[i][vecpoints[i].x * j + vecpoints[i].y] ++;
+                buffer.mat[j][vecpoints[i].x * j + vecpoints[i].y] ++;
             }
         }
     }
@@ -55,10 +55,10 @@ int main ()
         Point S {i, i%3} ;
         v.push_back (S);
     }
-    for (int i = 0; i<20; i++)
+    /* for (int i = 0; i<20; i++)
     { 
         v[i].AffichePoint();
-    }
+    } */
     v.push_back (P);
     v.push_back (Q);
     v.push_back (R);
