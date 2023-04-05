@@ -6,7 +6,7 @@
 #include<sstream>
 #include <array>
 
-
+#include "Point.hpp"
 
 struct Image
 {
@@ -17,5 +17,6 @@ struct Image
     std :: vector<std :: vector< std:: array<int,3>>> image;
     
     void afficheImage();
+    void dessiner_ligne(Point point);
     
 };
