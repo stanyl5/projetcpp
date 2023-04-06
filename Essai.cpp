@@ -126,16 +126,16 @@ std::vector<Point> donnerpoints (Image image)
 
 std ::vector<Point> Houghnormale(std ::vector<Point> vecpoints)
 {
-    int N = 30;
+    int N = 60;
     Matrice buffer(N,N);
     for (unsigned int i= 0; i< vecpoints.size(); i++) // On boucle sur tous les points différents du fond, ceux qu'on nous a transmis
     {
-        for ( int j=0; j<N; j++) // On boucle sur une fenetre près établie
+        for ( int j=-N/2; j<N/2; j++) // On boucle sur une fenetre près établie
         {
                 
-            if (vecpoints[i].x * j + vecpoints[i].y>0 && vecpoints[i].x * j + vecpoints[i].y<30) // on trace la droite et on s'intéresse aux points dans la fenetre
+            if (vecpoints[i].x * j + vecpoints[i].y * j>-N/2 && vecpoints[i].x * j + vecpoints[i].y<N/2) // on trace la droite et on s'intéresse aux points dans la fenetre
             {
-                buffer.mat[j][vecpoints[i].x * j + vecpoints[i].y] ++; // On incrémente chaque point sur une droite
+                buffer.mat[j+N/2][vecpoints[i].x * j + vecpoints[i].y] ++; // On incrémente chaque point sur une droite
             }
         }
     }
@@ -194,10 +194,12 @@ int main ()
     std :: vector<Point> vec;
     vec = donnerpoints(A);
     std :: vector<Point> res;
+    Point bornesup = vec[0];
+    Point borneinf = vec[vec.size()];
     res = Houghnormale(vec);
     for (int i=0 ; i<res.size(); i++)
     {
-       A.dessiner_ligne(res[i]);
+       A.dessiner_ligne(res[i],bornesup,borneinf);
     }
     ecrire_fichier(A);
     

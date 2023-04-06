@@ -17,6 +17,6 @@ struct Image
     std :: vector<std :: vector< std:: array<int,3>>> image;
     
     void afficheImage();
-    void dessiner_ligne(Point point);
+    void dessiner_ligne(Point point,Point bornesup, Point borneinf);
     
 };

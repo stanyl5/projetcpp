@@ -25,18 +25,23 @@ void Image ::  afficheImage()
 }
 
 
-void Image :: dessiner_ligne(Point point)
+void Image :: dessiner_ligne(Point point, Point bornesup, Point borneinf)
 // point.x est le coefficient directeur de la droite 
 // point.y est l'ordonée à l'origine
 {
     float m =point.x;
     float p = point.y;
+    int xA = - bornesup.x;
+    int yA = bornesup.y;
+    int xB = - borneinf.x;
+    int yB = -borneinf.y;
+
 
     if (abs(m)<=1)
     {
-        for(int j = 0; j < colonne; j++) 
+        for(int j = yA ; j < yB ; j++) 
         {
-            if (((int)(m*j+p)<=ligne-1)&&((int)(m*j+p)>=0)) // pour eviter que la droite "depasse" l'image
+            if (((int)(m*j+p)<=xB-1)&&((int)(m*j+p)>=xA)) // pour eviter que la droite "depasse" l'image
             {
                 //std::cout<< (int)(m*j+p) << " "<< m*j+p<< " " << Norme((int)(m*j+p),m*j+p)*255<< " ";
                 //std::cout << int(m*j+p)/(m*j+p)<< " "; 
@@ -45,7 +50,7 @@ void Image :: dessiner_ligne(Point point)
                     image[(int)(m*j+p)][j][k] = Norme((int)(m*j+p),m*j+p)*255;                     
                 }
             }
-            if (((int)(m*j+p)+1<=ligne-1)&&((int)(m*j+p)+1>=0)) // pour eviter que la droite "depasse" l'image
+            if (((int)(m*j+p)+1<=xB-1)&&((int)(m*j+p)+1>=xA)) // pour eviter que la droite "depasse" l'image
             { 
                 for (int k=0;k<3;k++)
                 {
@@ -56,9 +61,9 @@ void Image :: dessiner_ligne(Point point)
     }
     if (abs(m)>1)
     {
-        for(int i = 0; i < ligne; i++) 
+        for(int i = xA; i < xB; i++) 
         {
-            if (((int)((i-p)/m)<=colonne-1)&&((int)((i-p)/m)>=0)) // pour eviter que la droite "depasse" l'image
+            if (((int)((i-p)/m)<=yB-1)&&((int)((i-p)/m)>=yA)) // pour eviter que la droite "depasse" l'image
             {
                 //std::cout<< (int)((i-p)/m) << " "<< ((i-p)/m)<< " " << Norme((int)((i-p)/m),((i-p)/m))*255<< " "<< (1-Norme((int)((i-p)/m),((i-p)/m)))*255<< " ";
                 for (int k=0;k<3;k ++)
@@ -66,7 +71,7 @@ void Image :: dessiner_ligne(Point point)
                     image[i][(int)((i-p)/m)][k] = Norme((int)((i-p)/m),((i-p)/m))*255;
                 }
             }
-            if (((int)((i-p)/m)+1<=colonne-1)&&((int)((i-p)/m)+1>=0)) // pour eviter que la droite "depasse" l'image
+            if (((int)((i-p)/m)+1<=yB-1)&&((int)((i-p)/m)+1>=yA)) // pour eviter que la droite "depasse" l'image
             { 
                 for (int k=0;k<3;k ++)
                 {
