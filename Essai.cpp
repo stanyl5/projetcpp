@@ -126,20 +126,20 @@ std::vector<Point> donnerpoints (Image image)
 
 std ::vector<Point> Houghnormale(std ::vector<Point> vecpoints)
 {
-    int N = 60;
+    int N = 30;
     Matrice buffer(N,N);
     for (unsigned int i= 0; i< vecpoints.size(); i++) // On boucle sur tous les points différents du fond, ceux qu'on nous a transmis
     {
-        for ( int j=-N/2; j<N/2; j++) // On boucle sur une fenetre près établie
+        for ( int j=0; j<N; j++) // On boucle sur une fenetre près établie
         {
                 
-            if (vecpoints[i].x * j + vecpoints[i].y * j>-N/2 && vecpoints[i].x * j + vecpoints[i].y<N/2) // on trace la droite et on s'intéresse aux points dans la fenetre
+            if (vecpoints[i].x * j + vecpoints[i].y>0 && vecpoints[i].x * j + vecpoints[i].y<30) // on trace la droite et on s'intéresse aux points dans la fenetre
             {
-                buffer.mat[j+N/2][vecpoints[i].x * j + vecpoints[i].y] ++; // On incrémente chaque point sur une droite
+                buffer.mat[j][vecpoints[i].x * j + vecpoints[i].y] ++; // On incrémente chaque point sur une droite
             }
         }
     }
-    float min = 2;
+    float min = 0;
     std ::vector<Point> vec;
     Point coormax;
     for (int i=0 ; i<N; i++)
@@ -193,15 +193,64 @@ int main ()
     A = lirefichier();
     std :: vector<Point> vec;
     vec = donnerpoints(A);
-    std :: vector<Point> res;
-    Point bornesup = vec[0];
-    Point borneinf = vec[vec.size()];
-    res = Houghnormale(vec);
-    for (int i=0 ; i<res.size(); i++)
-    {
-       A.dessiner_ligne(res[i],bornesup,borneinf);
-    }
-    ecrire_fichier(A);
     
+    std :: vector<Point> res;
+    res = Houghnormale(vec);
+
+
+    
+
+    for (int i=0 ; i<res.size(); i++)//res.size()
+    {   
+        std::cout<<"res ";
+        res[i].AffichePoint();
+        std::vector<Point> vec_doublons;
+        if (res[i].x == 0)
+        {
+            do 
+            {
+                std::cout<<"cas1 ";
+                res[i].AffichePoint();
+                vec_doublons.push_back(res[i]);
+                i ++;
+
+            }while (res[i].y+1 == res[i+1].y);
+        }
+        else
+        {
+            do 
+            {
+                std::cout<<"cas2 ";
+                res[i].AffichePoint();
+                vec_doublons.push_back(res[i]);
+                i ++;
+
+            }while (res[i].y+1 == res[i+1].y || res[i].x+1 == res[i+1].x);
+        }
+
+        float somme_x = 0.0;
+        float somme_y = 0.0;
+        for (int j = 0 ; j<vec_doublons.size(); j++){
+            somme_x = somme_x + vec_doublons[j].x;
+            somme_y = somme_y + vec_doublons[j].y;
+        }
+        
+        float point_x = somme_x / vec_doublons.size();
+        float point_y = somme_y / vec_doublons.size();
+
+        Point point;
+        point.x = point_x;
+        point.y = point_y;
+
+        std::cout<<"Point final " ;
+        point.AffichePoint();
+        //std::cout<<res[i].x;
+        A.dessiner_ligne(point);
+    }
+    
+    
+
+    ecrire_fichier(A);
+
     return 0;
 }
