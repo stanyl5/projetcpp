@@ -14,6 +14,7 @@ Cette méthode n'étant pas la plus optimale, il faudra passer ensuite en repré
 
 
 > Structure du code 
+
 Le code est réparti en un Main et trois classes : Point, Matrice et Image.
 Les 3 classes ont une fonction d'affichage qui nous a été utile pour le débuguage.
 Image contient les fonctions donnerdroites, dessiner_ligne, doublons et ecrire_fichier.
@@ -40,9 +41,11 @@ Enfin on trace les droites à tracer grâce aux fonctions dessinerligne et écri
 
 
 >Ce qui a été essayé et qui n'a pas abouti mais qui a été laissé en commentaire:
+
 Dans la fonction dessinerligne de la classe Image, on a essayé de ne tracer que des segments de droite. L'anti-aliasing a aussi été laissé en commentaire car pas optimal au niveau de l'affichage.
 
 >Comment se servir du code développé :
+
 Dans essai.cpp,  il faut changer le nom du fichier .ppm au sein de la fonction lirefichier()
 Dans la classe image, dans la fonction écrirefichier il est possible de modifier le nom de la nouvelle image qui sera créee avec les droites detectées.
 Ensuite dans le terminal il faut compiler toutes les classes ainsi que le main :
